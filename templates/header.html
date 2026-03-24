@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<head>
+</head>
+<body>
+    <nav>
+        <a href="/">Accueil</a>
+        {% if 'user_id' in session %}
+            <a href="/create" class="btn btn-primary btn-sm">Créer</a>
+            <span>{{ session['user_name'] }}</span>
+            <form method="post" action="/logout">
+                <input type="submit" value="Logout">
+            </form>
+
+        {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        {% endif %}
+
+        <form action="/search">
+            <input type="text" name="query" value="{{ query|default('') }}">
+            <input type="submit" value="Search">
+      </form>
+    </nav>
+</body>
