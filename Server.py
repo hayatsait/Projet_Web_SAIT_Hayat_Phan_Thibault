@@ -42,6 +42,7 @@ def search():
 @app.get('/annonces')
 @login_required
 def toAnnonce():
+   annonces = model.getAllActive() # Liste de toutes les annonces valides
    return render_template('annonce.html')
 
 @app.get('/login')
