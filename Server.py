@@ -45,9 +45,10 @@ def search():
 
 @app.get('/annonces')
 @login_required
-def toAnnonce():
+def toAnnonces():
+   username = session['username']
    annonces = model.getAllActive() # Liste de toutes les annonces valides
-   return render_template('annonce.html', annonces = annonces)
+   return render_template('annonces.html', annonces = annonces, logged_in=True, username=username)
 
 @app.get('/login')
 def tologin():
@@ -60,9 +61,9 @@ def toregister():
 @app.get('/annonces/<id>')
 @login_required
 def toAnnonce(id):
-   annonce = model.getAnnouncementByID(id)
-   user = model.getUserbyAnnonceId(id)
-   return render_template('annonce.html', annonce = annonce, user = user)
+   annonce = model.getAnnouncementByID(int(id))
+   user = model.getUserbyAnnonceId(int(id))
+   return render_template('annonce.html', annonce = annonce , user = user)
 
 @app.get('/annonces/<id>/claim')
 @login_required
@@ -73,9 +74,10 @@ def toClaim(id):
 @app.get('/annonces/new')
 @login_required
 def toCreateAnnonce():
+   user_id = session['user_id']
    return render_template('NewAnnonce.html')
 
-@app.get('/logout')
+@app.post('/logout')
 @login_required
 def logout():
   session.clear()
@@ -94,11 +96,12 @@ def login_post():
 
     if user_id == -1:
         return redirect(url_for('tologin'))
-
-    name = model.getName(user_id)
+    
+    session.clear()
+    name = model.getNamebyEmail(email)
     session['user_id'] = user_id
-    session['user_name'] = name
-    return redirect(url_for('home'))
+    session['username'] = name
+    return redirect('/')
 
 @app.post('/register')
 def register_post():
@@ -112,18 +115,18 @@ def register_post():
 @login_required
 def addAnnonces():
     user_id = session['user_id']
-    obj = request.form['object']
+    obj = request.form['objet']
     desc = request.form['description']
     loc = request.form['location']
-    cont = request.form['contact']
-    model.new_announcement(user_id, obj, desc, loc, cont)
+    img = request.form['image']
+    cont = request.form['email']
+    model.new_announcement(user_id, obj, desc, loc, img, cont)
     return redirect('/annonces')
 
 @app.post('/annonces/<id>/claim')
 @login_required
-def Validation():
-   idObj = f"annonces {id}"
-   model.confirmation(idObj)
+def Validation(id):
+   model.confirmation(id)
    return redirect('/annonces')
 
 if __name__=="__main__":

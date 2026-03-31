@@ -1,6 +1,6 @@
 import sqlite3
 import math
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 DBFILENAME = 'LostAndFound.sqlite'
@@ -60,12 +60,12 @@ def search(query="", page=1):
     'num_pages': math.ceil(float(num_found) / float(num_per_page))
   }
 
-def login(name, password, db_name=DBFILENAME):
+def login(email, password, db_name=DBFILENAME):
     with sqlite3.connect(db_name) as conn:
         conn.row_factory = sqlite3.Row
         cur = conn.execute(
-            'SELECT id, username, password_hash FROM user WHERE username = ?',
-            (name,)
+            'SELECT * FROM user WHERE email = ?',
+            (email,)
         )
         row = cur.fetchone()
 
@@ -78,37 +78,42 @@ def login(name, password, db_name=DBFILENAME):
     return -1
 
 def new_user(email, name, password):
+  password = generate_password_hash(password)
   new = db_insert('INSERT INTO User (email, username, password_hash) VALUES(? , ?, ?)', (email, name, password))
   return new
 
 def getName(id):
-    name = db_fetch('SELECT * From User Where id =?',(id))
+    name = db_fetch('SELECT * From User Where id =?',(id,))
     return name['username']
 
-def new_announcement(user_id, item, desc, loc, cont):
-  new = db_insert('INSERT INTO Annonce (user_id, objet, description, location, contact, status)', (user_id, item, desc, loc, cont, False))
+def new_announcement(user_id, item, desc, loc, img, cont):
+  new = db_insert('INSERT INTO Annonce (user_id, objet, description, location, image, contact) VALUES (?,?,?,?,?, ?)', (user_id, item, desc,img ,loc, cont))
   return new
 
 def confirmation(id):
-  found = db_update('UPDATE Annonce SET status = True WHERE id = ?', (id))
+  found = db_update('UPDATE Annonce SET status = True WHERE id = ?', (id,))
   return found
 
 def getUserById(user_id):
-  user = db_fetch('SELECT * FROM User WHERE id = ?', (user_id))
+  user = db_fetch('SELECT * FROM User WHERE id = ?', (user_id,))
   return user
 
 def getUserByEmail(email):
-  user = db_fetch('SELECT * FROM User WHERE email = ?', (email))
+  user = db_fetch('SELECT * FROM User WHERE email = ?', (email,))
   return user
 
 def getAllActive():
-  return db_fetch('SELECT * FROM Annonce Where status = False')
+  return db_fetch('SELECT * FROM Annonce Where status = False', args=(), all=True , db_name= DBFILENAME)
 
 def getAnnouncementByID(objID):
-  Anon = db_fetch('SELECT * FROM Annonce Where id = ?',(objID))
+  Anon = db_fetch('SELECT * FROM Annonce Where id = ?',(objID,),  all=False , db_name= DBFILENAME)
   return Anon
 
 def getUserbyAnnonceId(objID):
-  id = db_fetch('SELECT user_id FROM Annonce Where id = ?',(objID))
-  user = user = db_fetch('SELECT * FROM User WHERE id = ?', (id))
+  id = db_fetch('SELECT user_id FROM Annonce Where id = ?',(objID,))
+  user = db_fetch('SELECT * FROM User WHERE id = ?', (id['user_id'],), all=False , db_name= DBFILENAME)
   return user
+
+def getNamebyEmail(email):
+    name = db_fetch('SELECT * From User Where email =?',(email,))
+    return name['username']
