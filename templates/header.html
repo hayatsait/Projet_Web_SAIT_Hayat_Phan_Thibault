@@ -5,7 +5,7 @@
 <body>
     <nav>
         <a href="/">Accueil</a>
-        {% if 'user_id' in session %}
+        {% if logged_in %}
             <a href="/create" class="btn btn-primary btn-sm">Créer</a>
             <span>{{ session['user_name'] }}</span>
             <form method="post" action="/logout">
@@ -13,8 +13,8 @@
             </form>
 
         {% else %}
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
+            <a href="/login">Se connecter</a>
+            <a href="/register">S'inscrire</a>
         {% endif %}
 
         <form action="/search">

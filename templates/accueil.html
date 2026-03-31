@@ -3,7 +3,9 @@
 {% include "header.html" %}
 
 <body>
+    {% if logged_in %}
     <a href = "/annonces"> Faire une annonce</a>
+    {% endif %}
     <div id = "AboutUs"></div>
     <div id = "ContactUs"></div>
 </body>

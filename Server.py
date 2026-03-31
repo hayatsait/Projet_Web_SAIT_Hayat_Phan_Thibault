@@ -23,7 +23,11 @@ def login_required(f) :
 
 @app.get('/')
 def home():
-    return render_template('accueil.html')
+  if 'username' in session:
+    username = session['username']
+    return render_template('accueil.html',logged_in=True, username=username)
+  else:
+    return render_template('accueil.html',logged_in=False, username=None)
 
 # Retourne les résultats de la recherche à partir de la requête "query"
 @app.get('/search')
@@ -43,7 +47,7 @@ def search():
 @login_required
 def toAnnonce():
    annonces = model.getAllActive() # Liste de toutes les annonces valides
-   return render_template('annonce.html')
+   return render_template('annonce.html', annonces = annonces)
 
 @app.get('/login')
 def tologin():
@@ -53,10 +57,18 @@ def tologin():
 def toregister():
    return render_template('register.html')
 
+@app.get('/annonces/<id>')
+@login_required
+def toAnnonce(id):
+   annonce = model.getAnnouncementByID(id)
+   user = model.getUserbyAnnonceId(id)
+   return render_template('annonce.html', annonce = annonce, user = user)
+
 @app.get('/annonces/<id>/claim')
 @login_required
-def toClaim():
-   return render_template('ClaimedConfirmation.html')
+def toClaim(id):
+   annonce = model.getAnnouncementByID(id)
+   return render_template('ClaimedConfirmation.html', annonce = annonce )
 
 @app.get('/annonces/new')
 @login_required
@@ -81,7 +93,7 @@ def login_post():
     user_id = model.login(email, password)
 
     if user_id == -1:
-        return redirect(url_for('login_form'))
+        return redirect(url_for('tologin'))
 
     name = model.getName(user_id)
     session['user_id'] = user_id
@@ -91,8 +103,9 @@ def login_post():
 @app.post('/register')
 def register_post():
     name = request.form['username']
+    email = request.form['email']
     password = request.form['password']
-    model.new_user(name, password)
+    model.new_user(email, name, password)
     return redirect('/')
 
 @app.post('/annonces/new')

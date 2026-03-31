@@ -64,7 +64,7 @@ def login(name, password, db_name=DBFILENAME):
     with sqlite3.connect(db_name) as conn:
         conn.row_factory = sqlite3.Row
         cur = conn.execute(
-            'SELECT id, name, password_hash FROM user WHERE name = ?',
+            'SELECT id, username, password_hash FROM user WHERE username = ?',
             (name,)
         )
         row = cur.fetchone()
@@ -78,7 +78,7 @@ def login(name, password, db_name=DBFILENAME):
     return -1
 
 def new_user(email, name, password):
-  new = db_insert('INSERT INTO User (email, name, password_hash) VALUES(? , ?, ?)', (email, name, password))
+  new = db_insert('INSERT INTO User (email, username, password_hash) VALUES(? , ?, ?)', (email, name, password))
   return new
 
 def getName(id):
@@ -107,3 +107,8 @@ def getAllActive():
 def getAnnouncementByID(objID):
   Anon = db_fetch('SELECT * FROM Annonce Where id = ?',(objID))
   return Anon
+
+def getUserbyAnnonceId(objID):
+  id = db_fetch('SELECT user_id FROM Annonce Where id = ?',(objID))
+  user = user = db_fetch('SELECT * FROM User WHERE id = ?', (id))
+  return user
