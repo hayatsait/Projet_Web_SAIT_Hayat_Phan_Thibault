@@ -12,7 +12,7 @@ def login():
 
 @app.route('/annonces')
 def annonces():
-    return "Page annonces"
+    return render_template('annonces.html')
 
 @app.route('/nouvelle_annonce')
 def nouvelle_annonce():
