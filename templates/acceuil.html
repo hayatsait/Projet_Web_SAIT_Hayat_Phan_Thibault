@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AmuFound – Objets perdus & trouvés</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/acceuil.css') }}">
+</head>
+<body id="top">
+  {% include "header.html" %}
+<section class="hero">
+  <div class="hero-content">
+    <h1>AmuFound</h1>
+    <p class="tagline">Un objet perdu ou trouvé sur le campus ?</p><p class = "textebleu"> <strong>Signalez-le facilement.</strong></p>
+    <p>
+      Une plateforme pour les étudiants du campus de Luminy pour publier et consulter
+      des annonces d'objets perdus ou trouvés. Signalez un objet ou parcourez les
+      annonces pour le retrouver.
+    </p>
+    <a href="{{ url_for('nouvelle_annonce') }}" class="btn btn-primary">Faire une annonce</a>
+  </div>
+
+  <div class="hero-image">
+      <img src="{{ url_for('static' , filename='img/hero.png') }}" alt="Illustration recherche">
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="how-inner">
+    <p class="section-label">Comment ça fonctionne</p>
+    <h2>Simple. Rapide. Efficace.</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Connectez-vous</h3>
+          <p>Connectez-vous ou créez un compte avec votre adresse universitaire <a href="mailto:" class = "amu">amu.fr</a>.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Perdu ou trouvé ?</h3>
+          <p>Consultez les annonces ou publiez la vôtre en quelques secondes.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Retrouvez facilement</h3>
+          <p>Contactez et récupérez vos objets grâce à la communauté du campus.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CTA CARDS ══════════════ -->
+<section class="cta-section">
+  <div class="cta-cards">
+    <a href="{{ url_for('annonces') }}" class="cta-card blue">
+      <div>
+        <h3>J'ai perdu un objet</h3>
+        <p>Consultez les objets trouvés ou publiez une annonce.</p>
+      </div>
+      <div class="arrow">↗</div>
+    </a>
+
+    <a href="{{ url_for('nouvelle_annonce') }}" class="cta-card orange">
+      <div>
+        <h3>J'ai trouvé un objet</h3>
+        <p>Publiez une annonce pour aider à le récupérer.</p>
+      </div>
+      <div class="arrow">↗</div>
+    </a>
+  </div>
+</section>
+
+{% include "footer.html" %}
+<script src="{{ url_for('static', filename='js/acceuil.js') }}"></script>
+</body>
+</html>
