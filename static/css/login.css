@@ -1,0 +1,408 @@
+/* ══════════════════════════════════════
+   Reset & Variables
+══════════════════════════════════════ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --blue:        #3B5BDB;
+    --blue-dark:   #2F4AC2;
+    --blue-light:  #EEF2FF;
+    --blue-panel:  #6B8FE8;
+    --blue-btn:    #5B7FE0;
+    --text:        #1A1A2E;
+    --muted:       #6B7280;
+    --border:      #E2E6F0;
+    --white:       #FFFFFF;
+    --shadow:      0 4px 24px rgba(59,91,219,.15);
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ══════════════════════════════════════
+   Conteneur principal
+══════════════════════════════════════ */
+.auth-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+/* ══════════════════════════════════════
+   Panneau illustration (droite par défaut)
+══════════════════════════════════════ */
+.illustration-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(145deg, #5B7FE0 0%, #7B9EF0 100%);
+    border-radius: 40px 0 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10;
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    overflow: hidden;
+}
+
+/* Quand signup est actif : le panneau glisse à gauche */
+.auth-container.signup-active .illustration-panel {
+    transform: translateX(-122%);
+    border-radius: 0 40px 40px 0;
+}
+
+.illustration-content {
+    position: absolute;
+    width: 100%;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    transition: opacity 0.4s ease;
+}
+
+.illustration-content h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.35;
+}
+
+.illustration-content p {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.illustration-content img {
+    width: 70%;
+    max-width: 260px;
+    margin-top: 10px;
+}
+
+/* Affichage conditionnel des contenus illustration */
+.login-illustration  { opacity: 1; }
+.signup-illustration { opacity: 0; }
+
+.auth-container.signup-active .login-illustration  { opacity: 0; }
+.auth-container.signup-active .signup-illustration { opacity: 1; }
+
+/* ══════════════════════════════════════
+   Sections formulaires
+══════════════════════════════════════ */
+.form-section {
+    position: absolute;
+    top: 0;
+    width: 55%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
+}
+
+/* LOGIN : visible à gauche par défaut */
+.login-section {
+    left: 0;
+    opacity: 1;
+    z-index: 2;
+    transform: translateX(0);
+}
+
+/* SIGNUP : caché à droite par défaut */
+.signup-section {
+    right: 0;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+    transform: translateX(30px);
+}
+
+/* Quand signup actif */
+.auth-container.signup-active .login-section {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-30px);
+}
+
+.auth-container.signup-active .signup-section {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+    z-index: 2;
+}
+
+/* ══════════════════════════════════════
+   Formulaire intérieur
+══════════════════════════════════════ */
+.auth-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+}
+
+.welcome-text {
+    text-align: left;
+    margin-bottom: 1.8rem;
+}
+
+.welcome-text h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.blue-text {
+    color: var(--blue);
+}
+
+/* ══════════════════════════════════════
+   Boutons sociaux
+══════════════════════════════════════ */
+.auth-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.btn-google,
+.btn-facebook {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 52px;
+    border-radius: 40px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+   
+}
+
+.btn-google {
+    flex: 1;
+    background: #EEF2FF;
+    border: 2px solid #7B9EF0;
+    color: var(--text);
+    padding: 0 20px;
+   
+}
+
+.btn-google:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+}
+
+.btn-google img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+.btn-google:hover img {
+    content: url("{{ url_for('static', filename='img/google_blanc.png') }}");
+}
+
+.btn-facebook {
+    flex-shrink: 0;
+    width: 64px;
+    background: var(--white);
+    border: 2px solid #7B9EF0;
+    color: var(--text);
+    padding: 0;
+}
+
+.btn-facebook span {
+    display: none;
+}
+
+.btn-facebook:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+}
+
+
+.btn-facebook img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+.btn-facebook:hover img {
+    content: url("{{ url_for('static', filename='img/facebook_blanc.png') }}");
+}
+
+/* ══════════════════════════════════════
+   Séparateur
+══════════════════════════════════════ */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 1.2rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ══════════════════════════════════════
+   Champs de formulaire
+══════════════════════════════════════ */
+.form-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--white);
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: var(--blue);
+}
+
+.form-input::placeholder {
+    color: #B0B7C3;
+}
+
+/* Champ mot de passe avec icône */
+.password-toggle {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.password-toggle .form-input {
+    margin-bottom: 0;
+    padding-right: 3rem;
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+/* Mot de passe oublié */
+.forgot-password {
+    text-align: right;
+    margin-bottom: 1.2rem;
+}
+
+.forgot-password a {
+    font-size: 0.82rem;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.forgot-password a:hover {
+    color: var(--blue);
+}
+
+/* ══════════════════════════════════════
+   Bouton principal
+══════════════════════════════════════ */
+.btn-auth {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.btn-auth:hover {
+    background: var(--blue-dark);
+    transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════
+   Lien switch
+══════════════════════════════════════ */
+.switch-form-text {
+    text-align: center;
+    margin-top: 1.2rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+}
+
+.switch-form-link {
+    color: var(--blue);
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.switch-form-link:hover {
+    opacity: 0.75;
+}
+
+/* ══════════════════════════════════════
+   Responsive
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+    .illustration-panel {
+        display: none;
+    }
+
+    .form-section {
+        width: 100%;
+        position: relative;
+    }
+
+    .login-section,
+    .signup-section {
+        position: absolute;
+        width: 100%;
+    }
+
+    html, body {
+        overflow: auto;
+    }
+}
