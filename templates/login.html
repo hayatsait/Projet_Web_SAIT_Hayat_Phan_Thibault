@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmuFound – Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+
+<div class="auth-container" id="auth-container">
+
+    <!-- ════ PANNEAU ILLUSTRATION (se déplace) ════ -->
+    <div class="illustration-panel">
+
+        <!-- Contenu affiché côté LOGIN -->
+        <div class="illustration-content login-illustration">
+            <h2>Retrouvons ensemble<br>les objets perdus<br>sur le campus.</h2>
+            <img src="{{ url_for('static', filename='img/hero.png') }}" alt="Illustration">
+        </div>
+
+        <!-- Contenu affiché côté SIGNUP -->
+        <div class="illustration-content signup-illustration">
+            <h2>Retrouvons ensemble<br>les objets perdus<br>sur le campus.</h2>
+            <img src="{{ url_for('static', filename='img/hero.png') }}" alt="Illustration">
+        </div>
+
+    </div>
+
+    <!-- ════ FORMULAIRE CONNEXION ════ -->
+    <div class="form-section login-section">
+        <div class="auth-form">
+
+            <div class="welcome-text">
+                <h2><span class="blue-text">Bienvenue</span> à nouveau</h2>
+            </div>
+
+            <!-- Boutons sociaux -->
+            <div class="auth-buttons">
+                <a href="#" class="btn-google">
+                    <img src="{{ url_for('static', filename='img/google_bleu.png') }}" alt="Google">
+                    <span>Se connecter avec Google</span>
+                </a>
+                <a href="#" class="btn-facebook">
+                    <img src="{{ url_for('static', filename='img/facebook_bleu.png') }}" alt="Facebook">
+                    <span>Facebook</span>
+                </a>
+            </div>
+
+            <div class="divider">Ou</div>
+
+            <!-- Formulaire Flask -->
+            <form action="#" method="post">
+                <input type="email" name="email" class="form-input" placeholder="Adresse email" required>
+                <div class="password-toggle">
+                    <input type="password" name="password" class="form-input" placeholder="Mot de passe" required>
+                    <i class="far fa-eye toggle-icon"></i>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Mot de passe oublié ?</a>
+                </div>
+                <button type="submit" class="btn-auth">Se connecter</button>
+            </form>
+
+            <div class="switch-form-text">
+                Première fois ici ?
+                <a class="switch-form-link" id="switch-to-signup">Inscrivez vous maintenant</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ════ FORMULAIRE INSCRIPTION ════ -->
+    <div class="form-section signup-section">
+        <div class="auth-form">
+
+            <div class="welcome-text">
+                <h2><span class="blue-text">Bienvenue</span> parmi nous</h2>
+            </div>
+
+            <!-- Boutons sociaux -->
+            <div class="auth-buttons">
+                <a href="#" class="btn-google">
+                    <img src="{{ url_for('static', filename='img/google_bleu.png') }}" alt="Google">
+                    <span>Se connecter avec Google</span>
+                </a>
+                <a href="#" class="btn-facebook">
+                    <img src="{{ url_for('static', filename='img/facebook_bleu.png') }}" alt="Facebook">
+                    <span>Facebook</span>
+                </a>
+            </div>
+
+            <div class="divider">Ou</div>
+
+            <!-- Formulaire Flask -->
+            <form action="#" method="post">
+                <input type="text" name="fullname" class="form-input" placeholder="Nom d'utilisateur" required>
+                <input type="email" name="email" class="form-input" placeholder="Adresse email" required>
+                <div class="password-toggle">
+                    <input type="password" name="password" class="form-input" placeholder="Mot de passe" required>
+                    <i class="far fa-eye toggle-icon"></i>
+                </div>
+                <div class="password-toggle">
+                    <input type="password" name="confirm_password" class="form-input" placeholder="Confirmez le mot de passe" required>
+                    <i class="far fa-eye toggle-icon"></i>
+                </div>
+                <button type="submit" class="btn-auth">Créer un compte</button>
+            </form>
+
+            <div class="switch-form-text">
+                Déjà un compte ?
+                <a class="switch-form-link" id="switch-to-login">Connectez vous maintenant</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

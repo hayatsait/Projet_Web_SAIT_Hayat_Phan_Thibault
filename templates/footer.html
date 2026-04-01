@@ -1,0 +1,57 @@
+<footer>
+  <div class="footer-grid">
+
+    <!-- Brand -->
+    <div class="footer-brand">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="AmuFound logo">
+        <span>AmuFound</span>
+      </div>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram">
+          <div class="social-circle">
+            <img src="{{ url_for('static', filename='img/instagram.png') }}" alt="Instagram">
+          </div>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <div class="social-circle">
+            <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+          </div>
+        </a>
+        <a href="#" aria-label="TikTok">
+          <div class="social-circle">
+            <img src="{{ url_for('static', filename='img/tiktok.png') }}" alt="TikTok">
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- Navigation -->
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><span class="icon">⌂</span> <a href="{{ url_for('index') }}">Accueil</a></li>
+        <li><span class="icon">📋</span> <a href="{{ url_for('annonces') }}">Annonces</a></li>
+        <li><span class="icon">✏️</span> <a href="{{ url_for('register') }}">Inscription</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-col">
+      <h4>Contact us</h4>
+      <ul>
+        <li><span class="icon">✉</span> <a href="mailto:amufound@gmail.com">amufound@gmail.com</a></li>
+        <li><span class="icon">📞</span> <a href="tel:+33712345678">+ 337 12 34 56 78</a></li>
+        <li><span class="icon">📍</span> 71 Av. de Luminy 13009</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>©2026 AmuFound. Tous droits réservés</span>
+    <a href="#top" class="back-to-top" title="Retour en haut">↑</a>
+  </div>
+</footer>

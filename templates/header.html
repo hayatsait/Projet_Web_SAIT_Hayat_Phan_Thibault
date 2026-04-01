@@ -1,0 +1,22 @@
+<nav id="navbar">
+  <a href="{{ url_for('index') }}" class="nav-logo">
+    <div class="logo-icon">
+        <img src="{{ url_for('static' , filename='img/logo.png') }}" alt="logo">
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="{{ url_for('index') }}" class="active">Accueil</a></li>
+    <li><a href="{{ url_for('annonces') }}">Annonces</a></li>
+  </ul>
+  {% if not logged_in %}
+  <a href="{{ url_for('login') }}" class="btn btn-primary nav-cta">Se connecter</a>
+  {% else %}
+  <form method="post" action="/logout" class = "btn btn-primary nav-cta">
+        <input type="submit" value="se déconnecter">
+  </form>
+  {% endif %}
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
