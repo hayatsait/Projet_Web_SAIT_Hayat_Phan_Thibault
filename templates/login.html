@@ -12,16 +12,14 @@
 
 <div class="auth-container" id="auth-container">
 
-    <!-- ════ PANNEAU ILLUSTRATION (se déplace) ════ -->
+    <!-- ════ PANNEAU ILLUSTRATION ════ -->
     <div class="illustration-panel">
 
-        <!-- Contenu affiché côté LOGIN -->
         <div class="illustration-content login-illustration">
             <h2>Retrouvons ensemble<br>les objets perdus<br>sur le campus.</h2>
             <img src="{{ url_for('static', filename='img/hero.png') }}" alt="Illustration">
         </div>
 
-        <!-- Contenu affiché côté SIGNUP -->
         <div class="illustration-content signup-illustration">
             <h2>Retrouvons ensemble<br>les objets perdus<br>sur le campus.</h2>
             <img src="{{ url_for('static', filename='img/hero.png') }}" alt="Illustration">
@@ -33,11 +31,20 @@
     <div class="form-section login-section">
         <div class="auth-form">
 
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="flash-messages">
+                  {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
             <div class="welcome-text">
                 <h2><span class="blue-text">Bienvenue</span> à nouveau</h2>
             </div>
 
-            <!-- Boutons sociaux -->
             <div class="auth-buttons">
                 <a href="#" class="btn-google">
                     <img src="{{ url_for('static', filename='img/google_bleu.png') }}" alt="Google">
@@ -51,22 +58,24 @@
 
             <div class="divider">Ou</div>
 
-            <!-- Formulaire Flask -->
-            <form action="#" method="post">
+            <form action="{{ url_for('login_post') }}" method="post">
                 <input type="email" name="email" class="form-input" placeholder="Adresse email" required>
+
                 <div class="password-toggle">
                     <input type="password" name="password" class="form-input" placeholder="Mot de passe" required>
                     <i class="far fa-eye toggle-icon"></i>
                 </div>
+
                 <div class="forgot-password">
                     <a href="#">Mot de passe oublié ?</a>
                 </div>
+
                 <button type="submit" class="btn-auth">Se connecter</button>
             </form>
 
             <div class="switch-form-text">
                 Première fois ici ?
-                <a class="switch-form-link" id="switch-to-signup">Inscrivez vous maintenant</a>
+                <a href="javascript:void(0)" class="switch-form-link" id="switch-to-signup">Inscrivez vous maintenant</a>
             </div>
 
         </div>
@@ -76,11 +85,20 @@
     <div class="form-section signup-section">
         <div class="auth-form">
 
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="flash-messages">
+                  {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
             <div class="welcome-text">
                 <h2><span class="blue-text">Bienvenue</span> parmi nous</h2>
             </div>
 
-            <!-- Boutons sociaux -->
             <div class="auth-buttons">
                 <a href="#" class="btn-google">
                     <img src="{{ url_for('static', filename='img/google_bleu.png') }}" alt="Google">
@@ -94,24 +112,26 @@
 
             <div class="divider">Ou</div>
 
-            <!-- Formulaire Flask -->
-            <form action="#" method="post">
-                <input type="text" name="fullname" class="form-input" placeholder="Nom d'utilisateur" required>
+            <form action="{{ url_for('register_post') }}" method="post">
+                <input type="text" name="username" class="form-input" placeholder="Nom d'utilisateur" required>
                 <input type="email" name="email" class="form-input" placeholder="Adresse email" required>
+
                 <div class="password-toggle">
                     <input type="password" name="password" class="form-input" placeholder="Mot de passe" required>
                     <i class="far fa-eye toggle-icon"></i>
                 </div>
+
                 <div class="password-toggle">
                     <input type="password" name="confirm_password" class="form-input" placeholder="Confirmez le mot de passe" required>
                     <i class="far fa-eye toggle-icon"></i>
                 </div>
+
                 <button type="submit" class="btn-auth">Créer un compte</button>
             </form>
 
             <div class="switch-form-text">
                 Déjà un compte ?
-                <a class="switch-form-link" id="switch-to-login">Connectez vous maintenant</a>
+                <a href="javascript:void(0)" class="switch-form-link" id="switch-to-login">Connectez vous maintenant</a>
             </div>
 
         </div>
