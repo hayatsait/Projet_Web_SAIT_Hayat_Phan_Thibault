@@ -1,16 +1,59 @@
 <nav id="navbar">
   <a href="{{ url_for('index') }}" class="nav-logo">
     <div class="logo-icon">
-        <img src="{{ url_for('static' , filename='img/logo.png') }}" alt="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo">
     </div>
   </a>
 
   <ul class="nav-links">
-    <li><a href="{{ url_for('index') }}" class="active">Accueil</a></li>
-    <li><a href="{{ url_for('annonces') }}">Annonces</a></li>
+    <li>
+      <a href="{{ url_for('index') }}"
+         class="{% if request.endpoint == 'index' %}active{% endif %}">
+        Accueil
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('annonces') }}"
+         class="{% if request.endpoint == 'annonces' %}active{% endif %}">
+        Annonces
+      </a>
+    </li>
   </ul>
 
-  <a href="{{ url_for('login') }}" class="btn btn-primary nav-cta">Se connecter</a>
+  <div class="nav-right">
+    {% if is_logged_in %}
+      <div class="profile-dropdown">
+        <button class="profile-toggle" id="profileToggle" type="button" onclick="toggleProfileMenu()">
+          <span class="chevron-down"></span>
+        </button>
+
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu-arrow"></div>
+
+          <div class="profile-menu-content">
+            <div class="profile-name">{{ current_username }}</div>
+            <div class="profile-email">{{ current_user_email }}</div>
+
+            <div class="profile-separator"></div>
+
+            <a href="{{ url_for('profil') }}" class="profile-link">
+              <img src="{{ url_for('static', filename='img/profil.png') }}" alt="Profil" class="profile-link-icon">
+              <span>Profil</span>
+            </a>
+
+            <form method="POST" action="{{ url_for('logout') }}">
+              <button type="submit" class="profile-link profile-link-button">
+                <img src="{{ url_for('static', filename='img/logout.png') }}" alt="Déconnexion" class="profile-link-icon">
+                <span>Se déconnecter</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <a href="{{ url_for('login') }}" class="btn btn-primary nav-cta">Se connecter</a>
+    {% endif %}
+  </div>
 
   <div class="hamburger" id="hamburger" onclick="toggleNav()">
     <span></span><span></span><span></span>

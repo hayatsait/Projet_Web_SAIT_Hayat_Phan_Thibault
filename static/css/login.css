@@ -406,3 +406,15 @@ a {
         overflow: auto;
     }
 }
+.flash-messages {
+    margin-bottom: 15px;
+}
+
+.flash-message {
+    background-color: #ffe0e0;
+    color: #b00020;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
