@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nouvelle annonce – AmuFound</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nouvelle_annonce.css') }}" />
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <main class="form-main">
+    <div class="form-container">
+
+      <!-- En-tête page -->
+      <div class="page-header">
+        <h1 class="page-title">Formulaire de déclaration d'objet perdu ou trouvé.</h1>
+        <p class="page-sub">Veuillez remplir ce formulaire et indiquez ici les informations sur l'objet perdu ou trouvé.</p>
+      </div>
+
+      <!-- Formulaire -->
+      <form
+        id="annonce-form"
+        method="POST"
+        action="{{ url_for('add_annonce') }}"
+        novalidate
+      >
+
+        <div class="form-grid">
+
+          <!-- Colonne gauche -->
+          <div class="form-col">
+
+            <!-- Type d'annonce -->
+            <div class="field-group">
+              <label class="field-label" for="type">Type d'annonce</label>
+              <div class="select-wrapper">
+                <select id="type" name="type" class="field-select" required>
+                  <option value="" disabled selected></option>
+                  <option value="perdu">Perdu</option>
+                  <option value="trouve">Trouvé</option>
+                </select>
+                <span class="select-arrow">
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="err-type"></span>
+            </div>
+
+            <!-- Catégorie de l'objet -->
+            <div class="field-group">
+              <label class="field-label" for="objet">Catégorie de l'objet</label>
+              <div class="select-wrapper">
+                <select id="objet" name="objet" class="field-select" required>
+                  <option value="" disabled selected></option>
+                  <option value="Clés">🔑 Clés</option>
+                  <option value="Carte">🪪 Carte</option>
+                  <option value="Phone">📱 Phone</option>
+                  <option value="Sac">👜 Sac</option>
+                  <option value="Habit">👕 Habit</option>
+                  <option value="Autre">📦 Autre</option>
+                </select>
+                <span class="select-arrow">
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="err-objet"></span>
+            </div>
+
+            <!-- Localisation -->
+            <div class="field-group">
+              <label class="field-label" for="location">Localisation</label>
+              <div class="select-wrapper">
+                <select id="location" name="location" class="field-select" required>
+                  <option value="" disabled selected></option>
+                  <option value="RU">RU</option>
+                  <option value="TPR1">TPR1</option>
+                  <option value="TPR2">TPR2</option>
+                  <option value="BAT A">BAT A</option>
+                  <option value="BAT B">BAT B</option>
+                  <option value="Technoforme">Technoforme</option>
+                  <option value="Hexagone">Hexagone</option>
+                  <option value="Autre">Autre</option>
+                </select>
+                <span class="select-arrow">
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="err-location"></span>
+            </div>
+
+          </div><!-- /col gauche -->
+
+          <!-- Colonne droite -->
+          <div class="form-col">
+
+            <!-- Contact (email) -->
+            <div class="field-group">
+              <label class="field-label" for="email">Contact</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="field-input"
+                placeholder="votre@email.fr"
+                required
+              />
+              <span class="field-error" id="err-email"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="field-group field-group--grow">
+              <label class="field-label" for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                class="field-textarea"
+                placeholder="Décrivez l'objet : couleur, marque, particularités…(Facultatif)"
+              ></textarea>
+              <span class="field-error" id="err-description"></span>
+            </div>
+
+            <!-- Image URL (optionnel, caché visuellement mais présent pour Flask) -->
+            <input type="hidden" name="image" value="" />
+
+          </div><!-- /col droite -->
+
+        </div><!-- /grid -->
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="submit" class="btn-submit" id="btn-submit">
+            Soumettre
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </main>
+
+  {% include 'footer.html' %}
+
+  <script src="{{ url_for('static', filename='js/nouvelle_annonce.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+/* ============================================
+   NOUVELLE ANNONCE — AmuFound
+   ============================================ */
+
+:root {
+  --blue:        #5b8dee;
+  --blue-light:  #eef3ff;
+  --blue-dark:   #1a1a2e;
+  --orange:      #f0a500;
+  --border:      #dde3f0;
+  --bg:          #f4f6fb;
+  --text-muted:  #6b7280;
+  --error:       #e05260;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --shadow-sm:   0 2px 8px rgba(91,141,238,.07);
+  --shadow-md:   0 4px 20px rgba(91,141,238,.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--blue-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Main ---------- */
+.form-main {
+  flex: 1;
+  padding: 44px 0 70px;
+}
+
+.form-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px;
+  animation: fadeUp .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Page header ---------- */
+.page-header {
+  margin-bottom: 36px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--blue);
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.page-sub {
+  font-size: .9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ---------- Form grid ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Col droite : description prend toute la hauteur restante */
+.form-col:last-child {
+  height: 100%;
+}
+
+/* ---------- Field group ---------- */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-group--grow {
+  flex: 1;
+}
+
+.field-label {
+  font-size: .82rem;
+  font-weight: 700;
+  color: #4a5568;
+  letter-spacing: .2px;
+}
+
+/* ---------- Select ---------- */
+.select-wrapper {
+  position: relative;
+}
+
+.field-select {
+  width: 100%;
+  height: 44px;
+  padding: 0 40px 0 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: .88rem;
+  font-family: inherit;
+  color: var(--blue-dark);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.field-select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(91,141,238,.15);
+}
+
+.field-select.is-invalid {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(224,82,96,.12);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #9ba8c0;
+  display: flex;
+  align-items: center;
+}
+
+.select-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- Text input ---------- */
+.field-input {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: .88rem;
+  font-family: inherit;
+  color: var(--blue-dark);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.field-input::placeholder { color: #b0bcd4; }
+
+.field-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(91,141,238,.15);
+}
+
+.field-input.is-invalid {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(224,82,96,.12);
+}
+
+/* ---------- Textarea ---------- */
+.field-textarea {
+  min-height: 148px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: .88rem;
+  font-family: inherit;
+  color: var(--blue-dark);
+  line-height: 1.55;
+  resize: vertical;
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  transition: border-color .2s, box-shadow .2s;
+  /* Effet subtil : le focus sur la description en bleu fait penser à l'image */
+}
+
+.field-textarea::placeholder { color: #b0bcd4; }
+
+.field-textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(91,141,238,.15);
+}
+
+.field-textarea.is-invalid {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(224,82,96,.12);
+}
+
+/* ---------- Erreurs champs ---------- */
+.field-error {
+  font-size: .77rem;
+  color: var(--error);
+  font-weight: 600;
+  min-height: 16px;
+  display: block;
+}
+
+/* ---------- Actions ---------- */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.btn-submit {
+  padding: 12px 38px;
+  border-radius: 30px;
+  border: none;
+  background: var(--blue);
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(91,141,238,.30);
+  transition: opacity .2s, transform .15s, box-shadow .2s;
+}
+
+.btn-submit:hover {
+  opacity: .92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(91,141,238,.38);
+}
+
+.btn-submit:active {
+  transform: scale(.97);
+}
+
+.btn-submit:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
