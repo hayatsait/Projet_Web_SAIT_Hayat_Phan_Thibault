@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Votre Profil – AmuFound</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profil.css') }}" />
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <main class="profil-main">
+    <div class="profil-container">
+
+      <div class="profil-hero">
+        <h1 class="profil-title">Votre Profil</h1>
+        <p class="profil-sub">
+          Gérez vos informations, consultez vos annonces et modifiez votre mot de passe.
+        </p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-list">
+            {% for msg in messages %}
+              <div class="flash-msg">{{ msg }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <section class="profil-card" id="section-info">
+        <h2 class="card-section-title">Informations personnelles</h2>
+
+        <div class="info-row" id="row-username">
+          <div class="field-floating">
+            <input
+              type="text"
+              id="input-username"
+              class="field-input"
+              value="{{ user.username }}"
+              placeholder=" "
+              disabled
+            />
+            <label class="field-floating-label" for="input-username">Nom d'utilisateur</label>
+          </div>
+          <button type="button" class="btn-modifier" id="btn-username" onclick="toggleEdit('username')">
+            Modifier
+          </button>
+        </div>
+
+        <form id="form-username" method="POST" action="{{ url_for('update_username') }}" style="display:none;">
+          <input type="hidden" name="username" id="hidden-username" />
+        </form>
+
+        <div class="info-row" id="row-email">
+          <div class="field-floating">
+            <input
+              type="email"
+              id="input-email"
+              class="field-input"
+              value="{{ user.email }}"
+              placeholder=" "
+              disabled
+            />
+            <label class="field-floating-label" for="input-email">Adresse email</label>
+          </div>
+          <button type="button" class="btn-modifier" id="btn-email" onclick="toggleEdit('email')">
+            Modifier
+          </button>
+        </div>
+
+        <form id="form-email" method="POST" action="{{ url_for('update_email') }}" style="display:none;">
+          <input type="hidden" name="email" id="hidden-email" />
+        </form>
+      </section>
+
+      <section class="profil-card" id="section-security">
+        <h2 class="card-section-title">Sécurité et confidentialité :</h2>
+
+        <div id="security-default">
+          <p class="security-desc">
+            Modifiez votre mot de passe en cliquant sur le bouton ci-dessous,
+            choisissez un mot de passe sécurisé pour protéger l'accès à votre compte.
+          </p>
+          <div class="security-action">
+            <button type="button" class="btn-modifier" onclick="openPasswordForm()">
+              Modifier mon mot de passe
+            </button>
+          </div>
+        </div>
+
+        <div id="security-form" style="display:none;">
+          <form method="POST" action="{{ url_for('update_password') }}" id="form-password">
+            <div class="field-floating">
+              <input
+                type="password"
+                id="old_password"
+                name="old_password"
+                class="field-input"
+                placeholder=" "
+                required
+              />
+              <label class="field-floating-label" for="old_password">Ancien mot de passe</label>
+            </div>
+
+            <div class="field-floating">
+              <input
+                type="password"
+                id="new_password"
+                name="new_password"
+                class="field-input"
+                placeholder=" "
+                required
+              />
+              <label class="field-floating-label" for="new_password">Nouveau mot de passe</label>
+            </div>
+
+            <div class="field-floating">
+              <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                class="field-input"
+                placeholder=" "
+                required
+              />
+              <label class="field-floating-label" for="confirm_password">Confirmez votre mot de passe</label>
+            </div>
+
+            <div class="security-action">
+              <button type="submit" class="btn-modifier">Modifier mon mot de passe</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="profil-card profil-card--danger" id="section-delete">
+        <h2 class="card-section-title danger-title">Supprimer mon compte :</h2>
+        <p class="security-desc">
+          La suppression de votre compte est définitive. Toutes vos
+          informations et vos annonces publiées seront perdues
+          et ne pourront pas être récupérées.
+        </p>
+        <div class="security-action">
+          <button type="button" class="btn-danger" onclick="confirmDelete()">
+            Supprimer mon compte
+          </button>
+        </div>
+
+        <form id="form-delete" method="POST" action="{{ url_for('delete_account') }}" style="display:none;"></form>
+      </section>
+
+    </div>
+  </main>
+
+  {% include 'footer.html' %}
+
+  <script src="{{ url_for('static', filename='js/profil.js') }}"></script>
+</body>
+</html>
