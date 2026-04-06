@@ -115,8 +115,8 @@ def delete_verification_code(email):
 
 def new_announcement(user_id, annonce_type, objet, desc, loc, img, cont):
     return db_insert("""
-        INSERT INTO Annonce (user_id, type, objet, description, location, image, contact)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Annonce (user_id, type, objet, description, location, image, contact, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 0, datetime('now', 'localtime'))
     """, (user_id, annonce_type, objet, desc, loc, img, cont))
 
 
@@ -156,7 +156,7 @@ def search_annonces(mode="perdu", objets=None, locations=None, query="", page=1)
     if locations is None:
         locations = []
 
-    num_per_page = 32
+    num_per_page = 6
 
     conditions = ["status = 0", "type = ?"]
     args = [mode]
@@ -192,11 +192,11 @@ def search_annonces(mode="perdu", objets=None, locations=None, query="", page=1)
     num_found = count_res["total"] if count_res else 0
 
     select_query = f"""
-        SELECT id, type, objet, description, location, image, contact, status
-        FROM Annonce
-        {where_clause}
-        ORDER BY id DESC
-        LIMIT ? OFFSET ?
+    SELECT id, type, objet, description, location, image, contact, status, created_at
+    FROM Annonce
+    {where_clause}
+    ORDER BY id DESC
+    LIMIT ? OFFSET ?
     """
 
     select_args = args + [num_per_page, (page - 1) * num_per_page]
@@ -213,3 +213,35 @@ def search_annonces(mode="perdu", objets=None, locations=None, query="", page=1)
         "next_page": page + 1,
         "num_pages": math.ceil(num_found / num_per_page) if num_found > 0 else 1
     }
+def update_username(user_id, username):
+    return db_update(
+        "UPDATE User SET username = ? WHERE id = ?",
+        (username, user_id)
+    )
+
+
+def update_email(user_id, email):
+    return db_update(
+        "UPDATE User SET email = ? WHERE id = ?",
+        (email, user_id)
+    )
+
+
+def check_user_password(email, password):
+    user = db_fetch("SELECT * FROM User WHERE email = ?", (email,))
+    if not user:
+        return False
+    return check_password_hash(user["password_hash"], password)
+
+
+def update_password(user_id, new_password):
+    hashed_password = generate_password_hash(new_password)
+    return db_update(
+        "UPDATE User SET password_hash = ? WHERE id = ?",
+        (hashed_password, user_id)
+    )
+
+
+def delete_user_account(user_id):
+    db_update("DELETE FROM Annonce WHERE user_id = ?", (user_id,))
+    return db_update("DELETE FROM User WHERE id = ?", (user_id,))
