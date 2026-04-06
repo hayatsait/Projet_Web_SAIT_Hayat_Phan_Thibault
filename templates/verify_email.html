@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vérification – AmuFound</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/verify_email.css') }}" />
+</head>
+<body>
+
+  <div class="page-wrapper">
+    <div class="card">
+
+      <div class="illus-wrapper">
+        <img
+          src="{{ url_for('static', filename='img/email-illustration.png') }}"
+          alt="Illustration email"
+          class="illus-img"
+        />
+      </div>
+
+      <h1 class="card-title">Entrez votre code de vérification</h1>
+
+      <p class="card-sub">
+        Nous avons envoyé un code à 6 chiffres à<br />
+        <strong>{{ email }}</strong>
+      </p>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for message in messages %}
+              <p class="otp-error">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form
+        id="otp-form"
+        method="POST"
+        action="{{ url_for('verify_email_post') }}"
+        autocomplete="off"
+        novalidate
+      >
+        <input type="hidden" name="code" id="otp-hidden" />
+
+        <div class="otp-inputs" id="otp-inputs" role="group" aria-label="Code de vérification">
+          <input class="otp-box" name="otp1" type="text" inputmode="numeric" maxlength="1" aria-label="Chiffre 1" />
+          <input class="otp-box" name="otp2" type="text" inputmode="numeric" maxlength="1" aria-label="Chiffre 2" />
+          <input class="otp-box" name="otp3" type="text" inputmode="numeric" maxlength="1" aria-label="Chiffre 3" />
+          <input class="otp-box" name="otp4" type="text" inputmode="numeric" maxlength="1" aria-label="Chiffre 4" />
+          <input class="otp-box" name="otp5" type="text" inputmode="numeric" maxlength="1" aria-label="Chiffre 5" />
+          <input class="otp-box" name="otp6" type="text" inputmode="numeric" maxlength="1" aria-label="Chiffre 6" />
+        </div>
+
+        <p class="otp-error" id="otp-error" style="display:none;"></p>
+
+        <button type="submit" class="btn-verify" id="btn-verify">
+          Vérifier
+        </button>
+      </form>
+
+      <p class="spam-hint">Pensez à vérifier votre dossier spams.</p>
+
+      <p class="resend-row">
+        Vous n'avez pas reçu le code ?
+        Consultez votre boîte mail ou recommencez l'inscription.
+      </p>
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/verify_email.js') }}"></script>
+</body>
+</html>
