@@ -1,10 +1,18 @@
-# Plateforme d’entraide étudiante
+# AmuFound
 
-Ce projet est un site web destiné aux étudiants de l’université.  
-Il permet aux étudiants de publier et consulter des annonces d’entraide, comme :
-- demandes d’aide pédagogique,
-- objets perdus ou retrouvés sur le campus,
-- recherche de colocataires,
-- questions entre étudiants.
+AmuFound est une plateforme web permettant aux étudiants du campus de Luminy de signaler et retrouver des objets perdus ou trouvés.
 
-L’objectif est de faciliter la communication et l’entraide au sein de la communauté étudiante.
+## Fonctionnalités
+- Création de compte avec vérification par email
+- Publication et consultation d’annonces
+- Filtrage par catégorie et localisation
+- Gestion du profil utilisateur
+
+## Technologies utilisées
+- Flask (backend)
+- SQLite (base de données)
+- HTML / CSS / JavaScript (frontend)
+
+## Lancer le projet
+```bash
+python app.py
