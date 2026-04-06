@@ -4,94 +4,269 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Annonces – AmuFound</title>
-  <!-- Google Fonts -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/annonces.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
 </head>
-<body>
+<body class="{% if found.mode == 'trouve' %}mode-trouve{% endif %}">
   {% include 'header.html' %}
 
   <main class="annonces-main">
-  <div class="annonces-container">
+    <div class="annonces-container">
 
-    <!-- Hero Section -->
-    <div class="annonces-hero">
-      <div class="hero-text">
-        <h1>
-          Recherche d'objets
-          <span class="highlight" id="mode-label">perdus</span>
-          sur le campus de Luminy
-        </h1>
-        <p class="hero-sub">Consultez les objets retrouvés sur le campus.</p>
-      </div>
-      <div class="toggle-switch">
-        <button class="toggle-btn active" id="btn-perdu" onclick="setMode('perdu')">Perdu</button>
-        <button class="toggle-btn" id="btn-trouve" onclick="setMode('trouve')">Trouvé</button>
-      </div>
-    </div>
+      <div class="annonces-hero">
+        <div class="hero-text">
+          <h1>
+            Recherche d'objets
+            <span class="highlight" id="mode-label">
+              {% if found.mode == "perdu" %}perdus{% else %}trouvés{% endif %}
+            </span>
+            sur le campus de Luminy
+          </h1>
+          <p class="hero-sub">
+            {% if found.mode == "perdu" %}
+              Consultez les objets perdus sur le campus.
+            {% else %}
+              Consultez les objets trouvés sur le campus.
+            {% endif %}
+          </p>
+        </div>
 
-    <!-- Search Bar -->
-    <div class="search-bar-wrapper">
-      <div class="search-bar">
-        <span class="search-icon">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </span>
-        <input type="text" id="search-input" placeholder="Recherchez par catégorie, location, description…" oninput="filterCards()" />
-      </div>
-    </div>
+        <div class="toggle-switch">
+          <button
+            class="toggle-btn {% if found.mode == 'perdu' %}active{% endif %}"
+            type="button"
+            onclick="setMode('perdu')">
+            Perdu
+          </button>
 
-    <!-- Filters -->
-    <div class="filters-box">
-      <div class="filter-row">
-        <span class="filter-label">Category</span>
-        <div class="filter-tags" id="filter-category">
-          <button class="tag active" data-filter="category" data-value="Clés" onclick="toggleFilter(this)">🔑 Clés</button>
-          <button class="tag" data-filter="category" data-value="Carte" onclick="toggleFilter(this)">🪪 Carte</button>
-          <button class="tag" data-filter="category" data-value="Phone" onclick="toggleFilter(this)">📱 Phone</button>
-          <button class="tag" data-filter="category" data-value="Sac" onclick="toggleFilter(this)">👜 Sac</button>
-          <button class="tag" data-filter="category" data-value="Habit" onclick="toggleFilter(this)">👕 Habit</button>
-          <button class="tag" data-filter="category" data-value="Autre" onclick="toggleFilter(this)">📦 Autre</button>
+          <button
+            class="toggle-btn {% if found.mode == 'trouve' %}active{% endif %}"
+            type="button"
+            onclick="setMode('trouve')">
+            Trouvé
+          </button>
         </div>
       </div>
-      <div class="filter-row">
-        <span class="filter-label">Localisation</span>
-        <div class="filter-tags" id="filter-localisation">
-          <button class="tag" data-filter="localisation" data-value="RU" onclick="toggleFilter(this)">RU</button>
-          <button class="tag" data-filter="localisation" data-value="TPR1" onclick="toggleFilter(this)">TPR1</button>
-          <button class="tag" data-filter="localisation" data-value="TPR2" onclick="toggleFilter(this)">TPR2</button>
-          <button class="tag" data-filter="localisation" data-value="BAT A" onclick="toggleFilter(this)">BAT A</button>
-          <button class="tag" data-filter="localisation" data-value="BAT B" onclick="toggleFilter(this)">BAT B</button>
-          <button class="tag" data-filter="localisation" data-value="Technoforme" onclick="toggleFilter(this)">Technoforme</button>
-          <button class="tag" data-filter="localisation" data-value="Hexagone" onclick="toggleFilter(this)">Hexagone</button>
-          <button class="tag" data-filter="localisation" data-value="Autre" onclick="toggleFilter(this)">Autre</button>
+
+      <form id="filters-form" method="GET" action="{{ url_for('annonces') }}">
+        <input type="hidden" name="mode" id="mode-input" value="{{ found.mode }}">
+
+        <div class="search-bar-wrapper">
+          <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              name="q"
+              id="search-input"
+              placeholder="Recherchez par catégorie, location, description…"
+              value="{{ found.query }}"
+            />
+          </div>
         </div>
+
+        <div class="filters-box">
+          <div class="filter-row">
+            <span class="filter-label">Category</span>
+            <div class="filter-tags" id="filter-category">
+              {% for cat in ["Clés", "Carte", "Phone", "Sac", "Habit", "Autre"] %}
+                <label class="tag {% if cat in found.objets %}active{% endif %}">
+                  <input
+                    type="checkbox"
+                    name="objet"
+                    value="{{ cat }}"
+                    {% if cat in found.objets %}checked{% endif %}
+                    hidden
+                  >
+                  {% if cat == "Clés" %}🔑{% endif %}
+                  {% if cat == "Carte" %}🪪{% endif %}
+                  {% if cat == "Phone" %}📱{% endif %}
+                  {% if cat == "Sac" %}👜{% endif %}
+                  {% if cat == "Habit" %}👕{% endif %}
+                  {% if cat == "Autre" %}📦{% endif %}
+                  {{ cat }}
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <span class="filter-label">Localisation</span>
+            <div class="filter-tags" id="filter-localisation">
+              {% for loc in ["RU", "TPR1", "TPR2", "BAT A", "BAT B", "Technoforme", "Hexagone", "Autre"] %}
+                <label class="tag {% if loc in found.locations %}active{% endif %}">
+                  <input
+                    type="checkbox"
+                    name="location"
+                    value="{{ loc }}"
+                    {% if loc in found.locations %}checked{% endif %}
+                    hidden
+                  >
+                  {{ loc }}
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="filter-clear-row">
+            <button type="button" class="clear-filters" onclick="clearFilters()">
+              Effacer tous les filtres
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="publish-cta">
+        <p>
+          Vous ne trouvez pas votre objet,
+          <a href="{{ url_for('nouvelle_annonce') }}" class="publish-link">
+            Cliquez ici
+          </a>
+          pour publier une annonce le concernant.
+        </p>
       </div>
-      <div class="filter-clear-row">
-        <button class="clear-filters" onclick="clearFilters()">Effacer tous les filtres</button>
+
+      <div class="cards-grid" id="cards-grid">
+        {% if found.results %}
+          {% for annonce in found.results %}
+            <div class="annonce-card {{ annonce.type }}">
+              <div class="card-meta">
+                <span class="card-date">
+                  Publiée le {{ annonce.created_at[:10] if annonce.created_at else "" }}
+                </span>
+              </div>
+
+              <div class="card-title">
+                <span class="card-icon">
+                  {% if annonce.objet == "Clés" %}🔑
+                  {% elif annonce.objet == "Carte" %}🪪
+                  {% elif annonce.objet == "Phone" %}📱
+                  {% elif annonce.objet == "Sac" %}👜
+                  {% elif annonce.objet == "Habit" %}👕
+                  {% else %}📦
+                  {% endif %}
+                </span>
+                {{ annonce.objet }}
+              </div>
+
+              <div class="card-location">
+                {{ annonce.location }}
+              </div>
+
+              <p class="card-description">{{ annonce.description }}</p>
+
+              <div class="card-action">
+                {% if annonce.type == "perdu" %}
+                  <button
+                    type="button"
+                    class="card-btn"
+                    data-id="{{ annonce.id }}"
+                    data-contact="{{ annonce.contact | e }}"
+                    data-type="perdu"
+                    data-created-at="{{ annonce.created_at[:10] if annonce.created_at else '' }}"
+                    onclick="openModal(this)"
+                  >
+                    J'ai trouvé cet objet
+                  </button>
+                {% else %}
+                  <button
+                    type="button"
+                    class="card-btn"
+                    data-id="{{ annonce.id }}"
+                    data-contact="{{ annonce.contact | e }}"
+                    data-type="trouve"
+                    data-created-at="{{ annonce.created_at[:10] if annonce.created_at else '' }}"
+                    onclick="openModal(this)"
+                  >
+                    Je réclame cet objet
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state" id="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>Aucune annonce ne correspond à vos filtres.</p>
+          </div>
+        {% endif %}
       </div>
-    </div>
 
-    <!-- Cards Grid -->
-    <div class="cards-grid" id="cards-grid">
-      <!-- Cards injected by JS -->
-    </div>
+      {% if found.num_pages > 1 %}
+        <div class="pagination">
+          {% if found.page > 1 %}
+            <a
+              class="pagination-btn"
+              href="{{ url_for('annonces', mode=found.mode, q=found.query, objet=found.objets, location=found.locations, page=found.page - 1) }}"
+            >
+              ← Précédent
+            </a>
+          {% endif %}
 
-    <!-- Empty state -->
-    <div class="empty-state" id="empty-state" style="display:none;">
-      <div class="empty-icon">🔍</div>
-      <p>Aucune annonce ne correspond à vos filtres.</p>
-    </div>
+          <div class="pagination-pages">
+            {% for p in range(1, found.num_pages + 1) %}
+              <a
+                class="pagination-page {% if p == found.page %}active{% endif %}"
+                href="{{ url_for('annonces', mode=found.mode, q=found.query, objet=found.objets, location=found.locations, page=p) }}"
+              >
+                {{ p }}
+              </a>
+            {% endfor %}
+          </div>
 
+          {% if found.page < found.num_pages %}
+            <a
+              class="pagination-btn"
+              href="{{ url_for('annonces', mode=found.mode, q=found.query, objet=found.objets, location=found.locations, page=found.page + 1) }}"
+            >
+              Suivant →
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Fermer">×</button>
+
+      <div class="modal-header">
+        <span class="modal-logo">amuFound</span>
+      </div>
+
+      <p class="modal-desc" id="modal-desc">
+        Retrouvez ci-dessous les coordonnées du propriétaire
+        et confirmez pour marquer ceci comme récupéré.
+      </p>
+
+      <div class="modal-contact-box">
+        <span class="modal-contact-label">Contact</span>
+        <span class="modal-contact-value" id="modal-contact-value">—</span>
+      </div>
+
+      <div class="modal-date-box">
+        <span class="modal-contact-label">Date de publication</span>
+        <span class="modal-contact-value" id="modal-date-value">—</span>
+      </div>
+
+      <form id="modal-form" method="POST" action="">
+        <button type="submit" class="modal-confirm-btn" id="modal-confirm-btn">
+          Confirmer
+        </button>
+      </form>
+    </div>
   </div>
-</main>
 
-{% include 'footer.html' %}
+  {% include 'footer.html' %}
 
-<script src="{{ url_for('static', filename='js/annonces.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/annonces.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/header.js') }}"></script>
 </body>
+</html>
